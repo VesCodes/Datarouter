@@ -26,6 +26,7 @@ App.MapHealthChecks("/healthz");
 App.MapPost("/datarouter/api/v1/public/data",
 	async (AnalyticsDbContext DbContext, [FromBody] AnalyticsRequest Request, [FromQuery] string SessionId, [FromQuery] string AppId, [FromQuery] string AppVersion, [FromQuery] string AppEnvironment, [FromQuery] string UserId) =>
 	{
+		DateTime Timestamp = DateTime.UtcNow;
 		IEnumerable<AnalyticsEvent> Events = Request.Events.Select(Event => new AnalyticsEvent
 		{
 			SessionId = SessionId,
@@ -33,6 +34,7 @@ App.MapPost("/datarouter/api/v1/public/data",
 			AppVersion = AppVersion,
 			AppEnvironment = AppEnvironment,
 			UserId = UserId,
+			Timestamp = Timestamp,
 			Event = Event
 		});
 
@@ -57,6 +59,7 @@ internal class AnalyticsEvent
 	public string? AppVersion { get; set; }
 	public string? AppEnvironment { get; set; }
 	public string? UserId { get; set; }
+	public DateTime? Timestamp { get; set; }
 	public JsonDocument? Event { get; set; }
 }
 
